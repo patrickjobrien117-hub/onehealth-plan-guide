@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OneHealth Plus Interactive Plan Study Guide</title>
+
+<style>
+:root{
+  --burg:#7a0646;
+  --burg2:#a20a5d;
+  --ink:#242124;
+  --muted:#6d6670;
+  --bg:#f7f4f6;
+  --line:#e6dfe4;
+  --soft:#f2e8ee
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Segoe UI,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink)
+}
+
+header{
+  background:linear-gradient(135deg,var(--burg),#4e0630);
+  color:#fff;
+  padding:25px 20px;
+  position:sticky;
+  top:0;
+  z-index:5;
+  box-shadow:0 3px 14px #0002
+}
+
+.wrap{max-width:1150px;margin:auto}
+.brand{font-weight:800;font-size:22px}
+.sub{opacity:.9;margin-top:3px}
+
+.menu{
+  margin-top:16px;
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap
+}
+
+select{
+  font-size:15px;
+  padding:11px 40px 11px 12px;
+  border-radius:9px;
+  border:1px solid #ddd;
+  background:#fff;
+  color:#222;
+  min-width:300px;
+  font-weight:700
+}
+
+button{
+  border:0;
+  border-radius:9px;
+  padding:11px 14px;
+  background:#fff;
+  color:var(--burg);
+  font-weight:700;
+  cursor:pointer
+}
+
+main{padding:28px 18px 55px}
+h1{font-size:30px;margin:0 0 8px}
+h2{font-size:20px;margin-top:30px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:17px;
+  box-shadow:0 2px 8px #00000009
+}
+
+.card:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 14px #00000012
+}
+
+.label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:var(--muted);
+  font-weight:800
+}
+
+.value{
+  font-size:18px;
+  font-weight:800;
+  margin-top:4px
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 9px;
+  border-radius:999px;
+  background:var(--soft);
+  color:var(--burg);
+  font-size:12px;
+  font-weight:800
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden
+}
+
+th,td{
+  padding:12px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  font-size:14px
+}
+
+th{
+  background:#f1e9ee;
+  font-size:11px;
+  text-transform:uppercase
+}
+
+tr:last-child td{border:0}
+
+.tip{
+  background:#fff;
+  border-left:5px solid var(--burg);
+  padding:15px 17px;
+  border-radius:8px;
+  margin-top:18px
+}
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px
+}
+
+.quick div{
+  padding:14px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10px
+}
+
+.search{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  font-size:15px;
+  margin:10px 0 16px
+}
+
+.hidden{display:none}
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:35px
+}
+
+@media(max-width:800px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:560px){
+  .grid,.quick{grid-template-columns:1fr}
+  select{min-width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<header
