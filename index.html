@@ -1,50 +1,1123 @@
-
 <!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">  
-<title>OneHealth Plus Interactive Plan Study Guide</title>  
-<style>  
-:root{--burg:#7a0646;--burg2:#a20a5d;--ink:#242124;--muted:#6d6670;--bg:#f7f4f6;--line:#e6dfe4;--soft:#f2e8ee}  
-*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}  
-header{background:linear-gradient(135deg,var(--burg),#4e0630);color:#fff;padding:25px 20px;position:sticky;top:0;z-index:5;box-shadow:0 3px 14px #0002}.wrap{max-width:1150px;margin:auto}  
-.brand{font-weight:800;font-size:22px}.sub{opacity:.9;margin-top:3px}.menu{margin-top:16px;display:flex;gap:9px;flex-wrap:wrap}  
-select{font-size:15px;padding:11px 40px 11px 12px;border-radius:9px;border:1px solid #ddd;background:#fff;color:#222;min-width:300px;font-weight:700}  
-button{border:0;border-radius:9px;padding:11px 14px;background:#fff;color:var(--burg);font-weight:700;cursor:pointer}  
-main{padding:28px 18px 55px}h1{font-size:30px;margin:0 0 8px}h2{font-size:20px;margin-top:30px}  
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:0 2px 8px #00000009}  
-.card:hover{transform:translateY(-1px);box-shadow:0 5px 14px #00000012}.label{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:800}.value{font-size:18px;font-weight:800;margin-top:4px}  
-.badge{display:inline-block;padding:4px 9px;border-radius:999px;background:var(--soft);color:var(--burg);font-size:12px;font-weight:800}  
-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}th{background:#f1e9ee;font-size:11px;text-transform:uppercase}tr:last-child td{border:0}  
-.tip{background:#fff;border-left:5px solid var(--burg);padding:15px 17px;border-radius:8px;margin-top:18px}.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.quick div{padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px}  
-.search{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;font-size:15px;margin:10px 0 16px}.hidden{display:none}footer{text-align:center;color:var(--muted);font-size:12px;margin-top:35px}  
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid,.quick{grid-template-columns:1fr}select{min-width:100%}}  
-</style></head>  
-<body>  
-<header><div class="wrap"><div class="brand">ONEHEALTH PLUS</div><div class="sub">Interactive Plan-by-Plan Study Guide</div>  
-<div class="menu"><select id="planSelect"><option value="">Choose a plan…</option></select><button onclick="overview()">Overview</button><button onclick="window.print()">Print</button></div></div></header>  
-<main class="wrap">  
-<section id="overview"><h1>Plan Comparison</h1><p>Use the toggle menu to jump to any plan.</p>  
-<input id="search" class="search" placeholder="Search plans, deductibles, HSA, copays…" oninput="render()"><div id="cards" class="grid"></div>  
-<h2>What to Memorize First</h2><div class="quick">  
-<div><b>Lowest deductible:</b> $1,000 Classic</div><div><b>Balanced Classic:</b> $1,500 / $2,500</div>  
-<div><b>Higher deductible:</b> $3,500 / $5,000 Classic</div><div><b>Highest deductible:</b> $7,350 Value</div>  
-<div><b>HSA:</b> $3,500 / $5,000 HSA</div><div><b>Core numbers:</b> deductible → OOP max → office copays → Rx</div></div>  
-<div class="tip"><b>Shared reminders:</b> Preventive care is shown as 100% with no member cost sharing / deductible waived. Freestanding labwork and X-rays use Quest Laboratories and LabCorp; the study materials show no charge on non-HSA plans and 20% after deductible on HSA plans. Cigna is the medical/PPO network and Securus is the TPA.</div>  
-</section>  
-<section id="detail" class="hidden"><span id="badge" class="badge"></span><h1 id="title"></h1><p id="hook"></p>  
-<div id="metrics" class="grid"></div><h2>Detailed Cost Sharing</h2>  
-<table><thead><tr><th>Category</th><th>In-Network</th><th>Out-of-Network</th></tr></thead><tbody id="rows"></tbody></table>  
-<div class="tip"><b>Study tip:</b> Memorize the in-network deductible and OOP maximum first. Then memorize office copays and prescription structure.</div></section>  
-<footer>OneHealth Plus study guide based on the plan comparison and internal FAQ materials used for training.</footer>  
-</main>  
-<script>  
-const plans=[{"name": "$1,000 Classic", "type": "Classic", "ded_in": "$1,000 / $2,000", "coins_in": "80% / 20%", "oop_in": "$5,000 / $10,000", "office": "$20 / $40 / $40", "ded_out": "$2,000 / $4,000", "coins_out": "60% / 40%", "oop_out": "$10,000 / $20,000", "rx": "$15 / $45 / $85", "hook": "Lowest deductible Classic option; lowest listed office copays."}, {"name": "$1,500 Classic", "type": "Classic", "ded_in": "$1,500 / $3,000", "coins_in": "80% / 20%", "oop_in": "$7,350 / $14,700", "office": "$30 / $60 / $60", "ded_out": "$3,000 / $6,000", "coins_out": "60% / 40%", "oop_out": "$14,700 / $29,400", "rx": "$15 / $45 / $85", "hook": "Balanced Classic option."}, {"name": "$2,500 Classic", "type": "Classic", "ded_in": "$2,500 / $5,000", "coins_in": "80% / 20%", "oop_in": "$7,350 / $14,700", "office": "$30 / $60 / $60", "ded_out": "$5,000 / $10,000", "coins_out": "60% / 40%", "oop_out": "$14,700 / $29,400", "rx": "$15 / $45 / $85", "hook": "Moderate deductible; same listed office copays as the $1,500 Classic."}, {"name": "$3,500 Classic", "type": "Classic", "ded_in": "$3,500 / $7,000", "coins_in": "80% / 20%", "oop_in": "$7,350 / $14,700", "office": "$45 / $90 / $90", "ded_out": "$7,000 / $14,000", "coins_out": "60% / 40%", "oop_out": "$14,700 / $29,400", "rx": "$15 / $65 / $100", "hook": "Higher deductible with higher listed office copays."}, {"name": "$5,000 Classic", "type": "Classic", "ded_in": "$5,000 / $10,000", "coins_in": "80% / 20%", "oop_in": "$7,350 / $14,700", "office": "$45 / $90 / $90", "ded_out": "$10,000 / $20,000", "coins_out": "60% / 40%", "oop_out": "$14,700 / $29,400", "rx": "$15 / $65 / $100", "hook": "High-deductible Classic option."}, {"name": "$7,350 Value", "type": "Value", "ded_in": "$7,350 / $14,700", "coins_in": "100%", "oop_in": "$7,350 / $14,700", "office": "$50 / $100 / $100", "ded_out": "$14,700 / $29,400", "coins_out": "50% / 50%", "oop_out": "$16,000 / $32,000", "rx": "$15 / $65 / $100", "hook": "Highest deductible in the listed Classic/Value lineup; highest listed out-of-network OOP max."}, {"name": "$3,500 HSA", "type": "HSA", "ded_in": "$3,500 / $7,000", "coins_in": "80% / 20%", "oop_in": "$6,650 / $13,100", "office": "20% after deductible", "ded_out": "$7,000 / $14,000", "coins_out": "60% / 40%", "oop_out": "$13,100 / $26,200", "rx": "After deductible", "hook": "HSA option; listed office services are 20% after deductible."}, {"name": "$5,000 HSA", "type": "HSA", "ded_in": "$5,000 / $10,000", "coins_in": "80% / 20%", "oop_in": "$6,650 / $13,100", "office": "20% after deductible", "ded_out": "$10,000 / $20,000", "coins_out": "60% / 40%", "oop_out": "$13,100 / $26,200", "rx": "After deductible", "hook": "Higher-deductible HSA option; listed office services are 20% after deductible."}];  
-const sel=document.getElementById('planSelect');  
-sel.innerHTML='<option value="">Choose a plan…</option>'+plans.map((p,i)=>'<option value="'+i+'">'+p.name+'</option>').join('');  
-function render(){const q=(document.getElementById('search').value||'').toLowerCase();document.getElementById('cards').innerHTML=plans.map((p,i)=>({p,i})).filter(x=>JSON.stringify(x.p).toLowerCase().includes(q)).map(x=>'<div class="card" onclick="show('+x.i+')" style="cursor:pointer"><span class="badge">'+x.p.type+'</span><h3>'+x.p.name+'</h3><div class="label">In-network deductible</div><div class="value">'+x.p.ded_in+'</div><div class="label" style="margin-top:9px">In-network OOP max</div><div class="value">'+x.p.oop_in+'</div><p>'+x.p.hook+'</p></div>').join('')}  
-function overview(){document.getElementById('overview').classList.remove('hidden');document.getElementById('detail').classList.add('hidden');sel.value='';scrollTo({top:0,behavior:'smooth'})}  
-function show(i){const p=plans[i];sel.value=i;document.getElementById('overview').classList.add('hidden');document.getElementById('detail').classList.remove('hidden');document.getElementById('badge').textContent=p.type;document.getElementById('title').textContent=p.name;document.getElementById('hook').textContent=p.hook;  
-document.getElementById('metrics').innerHTML=[['In-network deductible',p.ded_in],['In-network OOP max',p.oop_in],['Office copays',p.office],['Rx retail 30-day',p.rx]].map(m=>'<div class="card"><div class="label">'+m[0]+'</div><div class="value">'+m[1]+'</div></div>').join('');  
-document.getElementById('rows').innerHTML=[['Deductible',p.ded_in,p.ded_out],['Coinsurance',p.coins_in,p.coins_out],['OOP maximum',p.oop_in,p.oop_out],['PCP / Specialist / Urgent',p.office,'See applicable plan terms'],['Rx Retail 30-Day',p.rx,'See applicable plan terms']].map(r=>'<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>').join('');scrollTo({top:0,behavior:'smooth'})}  
-sel.addEventListener('change',e=>e.target.value===''?overview():show(Number(e.target.value)));render();  
-</script></body></html>
+<title>OneHealth Plus Interactive Plan Study Guide</title>
+
+<style>
+:root{
+  --burg:#7a0646;
+  --burg2:#a20a5d;
+  --ink:#242124;
+  --muted:#6d6670;
+  --bg:#f7f4f6;
+  --line:#e6dfe4;
+  --soft:#f2e8ee;
+  --green:#16794b;
+  --greenSoft:#e7f5ee;
+  --purple:#5632a8;
+  --purpleSoft:#eee9fb;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Segoe UI,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+
+header{
+  background:linear-gradient(135deg,var(--burg),#4e0630);
+  color:#fff;
+  padding:24px 18px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  box-shadow:0 3px 14px #0002;
+}
+
+.wrap{
+  max-width:1180px;
+  margin:auto;
+}
+
+.brand{
+  font-weight:800;
+  font-size:24px;
+}
+
+.sub{
+  opacity:.9;
+  margin-top:3px;
+}
+
+.menu{
+  margin-top:16px;
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+select{
+  font-size:15px;
+  padding:11px 40px 11px 12px;
+  border-radius:9px;
+  border:1px solid #ddd;
+  background:#fff;
+  color:#222;
+  min-width:290px;
+  font-weight:700;
+}
+
+button{
+  border:0;
+  border-radius:9px;
+  padding:11px 14px;
+  background:#fff;
+  color:var(--burg);
+  font-weight:700;
+  cursor:pointer;
+}
+
+button.primary{
+  background:var(--burg);
+  color:#fff;
+}
+
+button.secondary{
+  background:#fff;
+  border:1px solid var(--line);
+  color:var(--ink);
+}
+
+main{
+  padding:28px 18px 55px;
+}
+
+h1{
+  font-size:30px;
+  margin:0 0 8px;
+}
+
+h2{
+  font-size:21px;
+  margin-top:32px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:17px;
+  box-shadow:0 2px 8px #00000009;
+}
+
+.card:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 14px #00000012;
+}
+
+.card h3{
+  margin:10px 0;
+}
+
+.label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:var(--muted);
+  font-weight:800;
+}
+
+.value{
+  font-size:18px;
+  font-weight:800;
+  margin-top:4px;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 9px;
+  border-radius:999px;
+  background:var(--soft);
+  color:var(--burg);
+  font-size:12px;
+  font-weight:800;
+}
+
+.badge.hsa{
+  background:var(--greenSoft);
+  color:var(--green);
+}
+
+.badge.valuePlan{
+  background:var(--purpleSoft);
+  color:var(--purple);
+}
+
+.search{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  font-size:15px;
+  margin:10px 0 16px;
+}
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.quick div{
+  padding:14px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.tip{
+  background:#fff;
+  border-left:5px solid var(--burg);
+  padding:15px 17px;
+  border-radius:8px;
+  margin-top:18px;
+}
+
+.hidden{
+  display:none;
+}
+
+.comparePanel{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+  margin-top:12px;
+}
+
+.compareGroups{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.compareGroup{
+  border-right:1px solid var(--line);
+  padding-right:15px;
+}
+
+.compareGroup:last-child{
+  border-right:0;
+}
+
+.groupTitle{
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.compareItem{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:11px 0;
+  font-size:14px;
+}
+
+.compareItem input{
+  width:18px;
+  height:18px;
+  accent-color:var(--burg);
+}
+
+.compareActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+  align-items:center;
+}
+
+.compareCount{
+  color:var(--muted);
+  font-size:14px;
+  font-weight:600;
+}
+
+.tableWrap{
+  width:100%;
+  overflow-x:auto;
+  margin-top:16px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  border:1px solid var(--line);
+  min-width:700px;
+}
+
+th,td{
+  padding:12px;
+  border:1px solid var(--line);
+  text-align:left;
+  font-size:14px;
+  vertical-align:top;
+}
+
+th{
+  background:#f1e9ee;
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.compareTable th.planClassic{
+  background:#fbe7ef;
+  color:var(--burg);
+}
+
+.compareTable th.planHSA{
+  background:var(--greenSoft);
+  color:var(--green);
+}
+
+.compareTable th.planValue{
+  background:var(--purpleSoft);
+  color:var(--purple);
+}
+
+.compareError{
+  padding:12px;
+  background:#fff2f4;
+  border:1px solid #f3c5d1;
+  color:#8c123f;
+  border-radius:9px;
+  margin-top:12px;
+}
+
+.planCheckbox{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:3px;
+}
+
+.planCheckbox input{
+  width:18px;
+  height:18px;
+  accent-color:var(--burg);
+}
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:35px;
+}
+
+@media(max-width:900px){
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .compareGroups{
+    grid-template-columns:1fr;
+  }
+
+  .compareGroup{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    padding-bottom:12px;
+  }
+
+  .compareGroup:last-child{
+    border-bottom:0;
+  }
+}
+
+@media(max-width:560px){
+  .grid,
+  .quick{
+    grid-template-columns:1fr;
+  }
+
+  select{
+    min-width:100%;
+  }
+
+  .menu{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .menu select{
+    grid-column:1 / -1;
+  }
+
+  h1{
+    font-size:26px;
+  }
+
+  th,td{
+    font-size:12px;
+    padding:9px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="wrap">
+
+<div class="brand">ONEHEALTH PLUS</div>
+<div class="sub">Interactive Plan-by-Plan Study Guide</div>
+
+<div class="menu">
+
+<select id="planSelect">
+<option value="">Choose a plan…</option>
+</select>
+
+<button onclick="overview()">Overview</button>
+<button onclick="goCompare()">Compare Plans</button>
+<button onclick="window.print()">Print</button>
+
+</div>
+
+</div>
+</header>
+
+<main class="wrap">
+
+<section id="overview">
+
+<h1>Plan Comparison</h1>
+<p>Search plans, open individual plan details, or select plans to compare side-by-side.</p>
+
+<input
+id="search"
+class="search"
+placeholder="Search plans, deductibles, HSA, copays…"
+oninput="render()"
+>
+
+<div id="cards" class="grid"></div>
+
+<h2 id="compareHeading">Compare Plans</h2>
+
+<p>Select 2–4 plans to compare side-by-side.</p>
+
+<div class="comparePanel">
+
+<div id="compareOptions" class="compareGroups"></div>
+
+<div class="compareActions">
+
+<button class="primary" onclick="comparePlans()">
+Compare Selected
+</button>
+
+<button class="secondary" onclick="clearComparison()">
+Clear Selection
+</button>
+
+<span id="compareCount" class="compareCount">
+0 plans selected
+</span>
+
+</div>
+
+<div id="comparisonResult"></div>
+
+</div>
+
+<h2>What to Memorize First</h2>
+
+<div class="quick">
+
+<div>
+<b>Lowest deductible:</b>
+$1,000 Classic
+</div>
+
+<div>
+<b>Balanced Classic:</b>
+$1,500 / $2,500
+</div>
+
+<div>
+<b>Higher deductible:</b>
+$3,500 / $5,000 Classic
+</div>
+
+<div>
+<b>Highest deductible:</b>
+$7,350 Value
+</div>
+
+<div>
+<b>HSA:</b>
+$3,500 / $5,000 HSA
+</div>
+
+<div>
+<b>Core numbers:</b>
+deductible → OOP max → office copays → Rx
+</div>
+
+</div>
+
+<div class="tip">
+
+<b>Shared reminders:</b>
+
+Preventive care is shown as 100% with no member cost sharing / deductible waived.
+
+Freestanding labwork and X-rays use Quest Laboratories and LabCorp.
+
+The study materials show no charge on non-HSA plans and 20% after deductible on HSA plans.
+
+Cigna is the medical/PPO network and Securus is the TPA.
+
+</div>
+
+</section>
+
+<section id="detail" class="hidden">
+
+<span id="badge" class="badge"></span>
+
+<h1 id="title"></h1>
+
+<p id="hook"></p>
+
+<div id="metrics" class="grid"></div>
+
+<h2>Detailed Cost Sharing</h2>
+
+<div class="tableWrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Category</th>
+<th>In-Network</th>
+<th>Out-of-Network</th>
+</tr>
+</thead>
+
+<tbody id="rows"></tbody>
+
+</table>
+
+</div>
+
+<div class="tip">
+
+<b>Study tip:</b>
+
+Memorize the in-network deductible and OOP maximum first.
+
+Then memorize office copays and prescription structure.
+
+</div>
+
+</section>
+
+<footer>
+OneHealth Plus study guide based on the plan comparison and internal FAQ materials used for training.
+</footer>
+
+</main>
+
+<script>
+
+const plans=[
+
+{
+name:"$1,000 Classic",
+type:"Classic",
+ded_in:"$1,000 / $2,000",
+coins_in:"80% / 20%",
+oop_in:"$5,000 / $10,000",
+office:"$20 / $40 / $40",
+ded_out:"$2,000 / $4,000",
+coins_out:"60% / 40%",
+oop_out:"$10,000 / $20,000",
+rx:"$15 / $45 / $85",
+hook:"Lowest deductible Classic option; lowest listed office copays."
+},
+
+{
+name:"$1,500 Classic",
+type:"Classic",
+ded_in:"$1,500 / $3,000",
+coins_in:"80% / 20%",
+oop_in:"$7,350 / $14,700",
+office:"$30 / $60 / $60",
+ded_out:"$3,000 / $6,000",
+coins_out:"60% / 40%",
+oop_out:"$14,700 / $29,400",
+rx:"$15 / $45 / $85",
+hook:"Balanced Classic option."
+},
+
+{
+name:"$2,500 Classic",
+type:"Classic",
+ded_in:"$2,500 / $5,000",
+coins_in:"80% / 20%",
+oop_in:"$7,350 / $14,700",
+office:"$30 / $60 / $60",
+ded_out:"$5,000 / $10,000",
+coins_out:"60% / 40%",
+oop_out:"$14,700 / $29,400",
+rx:"$15 / $45 / $85",
+hook:"Moderate deductible; same listed office copays as the $1,500 Classic."
+},
+
+{
+name:"$3,500 Classic",
+type:"Classic",
+ded_in:"$3,500 / $7,000",
+coins_in:"80% / 20%",
+oop_in:"$7,350 / $14,700",
+office:"$45 / $90 / $90",
+ded_out:"$7,000 / $14,000",
+coins_out:"60% / 40%",
+oop_out:"$14,700 / $29,400",
+rx:"$15 / $65 / $100",
+hook:"Higher deductible with higher listed office copays."
+},
+
+{
+name:"$5,000 Classic",
+type:"Classic",
+ded_in:"$5,000 / $10,000",
+coins_in:"80% / 20%",
+oop_in:"$7,350 / $14,700",
+office:"$45 / $90 / $90",
+ded_out:"$10,000 / $20,000",
+coins_out:"60% / 40%",
+oop_out:"$14,700 / $29,400",
+rx:"$15 / $65 / $100",
+hook:"High-deductible Classic option."
+},
+
+{
+name:"$7,350 Value",
+type:"Value",
+ded_in:"$7,350 / $14,700",
+coins_in:"100%",
+oop_in:"$7,350 / $14,700",
+office:"$50 / $100 / $100",
+ded_out:"$14,700 / $29,400",
+coins_out:"50% / 50%",
+oop_out:"$16,000 / $32,000",
+rx:"$15 / $65 / $100",
+hook:"Highest deductible in the listed Classic/Value lineup; highest listed out-of-network OOP max."
+},
+
+{
+name:"$3,500 HSA",
+type:"HSA",
+ded_in:"$3,500 / $7,000",
+coins_in:"80% / 20%",
+oop_in:"$6,650 / $13,100",
+office:"20% after deductible",
+ded_out:"$7,000 / $14,000",
+coins_out:"60% / 40%",
+oop_out:"$13,100 / $26,200",
+rx:"After deductible",
+hook:"HSA option; listed office services are 20% after deductible."
+},
+
+{
+name:"$5,000 HSA",
+type:"HSA",
+ded_in:"$5,000 / $10,000",
+coins_in:"80% / 20%",
+oop_in:"$6,650 / $13,100",
+office:"20% after deductible",
+ded_out:"$10,000 / $20,000",
+coins_out:"60% / 40%",
+oop_out:"$13,100 / $26,200",
+rx:"After deductible",
+hook:"Higher-deductible HSA option; listed office services are 20% after deductible."
+}
+
+];
+
+const sel=document.getElementById("planSelect");
+
+sel.innerHTML=
+'<option value="">Choose a plan…</option>'+
+plans.map((p,i)=>
+'<option value="'+i+'">'+p.name+'</option>'
+).join("");
+
+function badgeClass(type){
+
+if(type==="HSA"){
+return "badge hsa";
+}
+
+if(type==="Value"){
+return "badge valuePlan";
+}
+
+return "badge";
+
+}
+
+function render(){
+
+const q=
+(document.getElementById("search").value||"").toLowerCase();
+
+document.getElementById("cards").innerHTML=
+plans
+.map((p,i)=>({p,i}))
+.filter(x=>
+JSON.stringify(x.p).toLowerCase().includes(q)
+)
+.map(x=>
+
+'<div class="card">'+
+
+'<div class="planCheckbox">'+
+'<input type="checkbox" class="cardCompare" value="'+x.i+'" onchange="syncComparison(this)">'+
+'</div>'+
+
+'<span class="'+badgeClass(x.p.type)+'">'+
+x.p.type+
+'</span>'+
+
+'<h3>'+
+x.p.name+
+'</h3>'+
+
+'<div class="label">In-network deductible</div>'+
+
+'<div class="value">'+
+x.p.ded_in+
+'</div>'+
+
+'<div class="label" style="margin-top:9px">'+
+'In-network OOP max'+
+'</div>'+
+
+'<div class="value">'+
+x.p.oop_in+
+'</div>'+
+
+'<p>'+
+x.p.hook+
+'</p>'+
+
+'<button class="secondary" onclick="show('+x.i+')">'+
+'View Details'+
+'</button>'+
+
+'</div>'
+
+).join("");
+
+syncCardCheckboxes();
+
+}
+
+function buildCompareOptions(){
+
+const groups={
+Classic:[],
+Value:[],
+HSA:[]
+};
+
+plans.forEach((p,i)=>{
+groups[p.type].push({p,i});
+});
+
+document.getElementById("compareOptions").innerHTML=
+
+'<div class="compareGroup">'+
+'<div class="groupTitle">Classic Plans</div>'+
+groups.Classic.map(x=>
+'<label class="compareItem">'+
+'<input type="checkbox" class="planCompare" value="'+x.i+'" onchange="comparisonChanged()">'+
+x.p.name+
+'</label>'
+).join("")+
+'</div>'+
+
+'<div class="compareGroup">'+
+'<div class="groupTitle">Value Plan</div>'+
+groups.Value.map(x=>
+'<label class="compareItem">'+
+'<input type="checkbox" class="planCompare" value="'+x.i+'" onchange="comparisonChanged()">'+
+x.p.name+
+'</label>'
+).join("")+
+'</div>'+
+
+'<div class="compareGroup">'+
+'<div class="groupTitle">HSA Plans</div>'+
+groups.HSA.map(x=>
+'<label class="compareItem">'+
+'<input type="checkbox" class="planCompare" value="'+x.i+'" onchange="comparisonChanged()">'+
+x.p.name+
+'</label>'
+).join("")+
+'</div>';
+
+}
+
+function selectedIndexes(){
+
+return [
+...document.querySelectorAll(".planCompare:checked")
+].map(cb=>Number(cb.value));
+
+}
+
+function comparisonChanged(){
+
+const selected=selectedIndexes();
+
+if(selected.length>4){
+
+const checked=
+document.querySelectorAll(".planCompare:checked");
+
+checked[checked.length-1].checked=false;
+
+alert("You can compare up to 4 plans at a time.");
+
+}
+
+updateCompareCount();
+
+syncCardCheckboxes();
+
+}
+
+function updateCompareCount(){
+
+const count=selectedIndexes().length;
+
+document.getElementById("compareCount").textContent=
+count+
+(count===1 ? " plan selected" : " plans selected");
+
+}
+
+function syncComparison(box){
+
+const matching=
+document.querySelector(
+'.planCompare[value="'+box.value+'"]'
+);
+
+if(matching){
+
+matching.checked=box.checked;
+
+}
+
+comparisonChanged();
+
+}
+
+function syncCardCheckboxes(){
+
+const selected=selectedIndexes();
+
+document
+.querySelectorAll(".cardCompare")
+.forEach(cb=>{
+
+cb.checked=
+selected.includes(Number(cb.value));
+
+});
+
+}
+
+function clearComparison(){
+
+document
+.querySelectorAll(".planCompare,.cardCompare")
+.forEach(cb=>cb.checked=false);
+
+document.getElementById("comparisonResult").innerHTML="";
+
+updateCompareCount();
+
+}
+
+function comparePlans(){
+
+const selected=
+selectedIndexes().map(i=>plans[i]);
+
+const result=
+document.getElementById("comparisonResult");
+
+if(selected.length<2){
+
+result.innerHTML=
+'<div class="compareError">'+
+'Please select at least 2 plans to compare.'+
+'</div>';
+
+return;
+
+}
+
+const rows=[
+
+["Plan Type","type"],
+
+["In-Network Deductible","ded_in"],
+
+["In-Network Coinsurance","coins_in"],
+
+["In-Network OOP Max","oop_in"],
+
+["Office Copays","office"],
+
+["Out-of-Network Deductible","ded_out"],
+
+["Out-of-Network Coinsurance","coins_out"],
+
+["Out-of-Network OOP Max","oop_out"],
+
+["Rx Retail 30-Day","rx"]
+
+];
+
+let html=
+
+'<div class="tableWrap">'+
+
+'<table class="compareTable">'+
+
+'<thead>'+
+
+'<tr>'+
+
+'<th>Benefit</th>';
+
+selected.forEach(p=>{
+
+let cls="planClassic";
+
+if(p.type==="HSA"){
+cls="planHSA";
+}
+
+if(p.type==="Value"){
+cls="planValue";
+}
+
+html+=
+'<th class="'+cls+'">'+
+p.name+
+'</th>';
+
+});
+
+html+=
+'</tr>'+
+'</thead>'+
+'<tbody>';
+
+rows.forEach(([label,key])=>{
+
+html+=
+'<tr>'+
+'<td><b>'+
+label+
+'</b></td>';
+
+selected.forEach(p=>{
+
+html+=
+'<td>'+
+p[key]+
+'</td>';
+
+});
+
+html+=
+'</tr>';
+
+});
+
+html+=
+'</tbody>'+
+'</table>'+
+'</div>';
+
+result.innerHTML=html;
+
+result.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+}
+
+function overview(){
+
+document
+.getElementById("overview")
+.classList.remove("hidden");
+
+document
+.getElementById("detail")
+.classList.add("hidden");
+
+sel.value="";
+
+scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+function show(i){
+
+const p=plans[i];
+
+sel.value=i;
+
+document
+.getElementById("overview")
+.classList.add("hidden");
+
+document
+.getElementById("detail")
+.classList.remove("hidden");
+
+const badge=
+document.getElementById("badge");
+
+badge.className=
+badgeClass(p.type);
+
+badge.textContent=
+p.type;
+
+document.getElementById("title").textContent=
+p.name;
+
+document.getElementById("hook").textContent=
+p.hook;
+
+document.getElementById("metrics").innerHTML=
+
+[
+["In-network deductible",p.ded_in],
+["In-network OOP max",p.oop_in],
+["Office copays",p.office],
+["Rx retail 30-day",p.rx]
+
+].map(m=>
+
+'<div class="card">'+
+'<div class="label">'+
+m[0]+
+'</div>'+
+'<div class="value">'+
+m[1]+
+'</div>'+
+'</div>'
+
+).join("");
+
+document.getElementById("rows").innerHTML=
+
+[
+["Deductible",p.ded_in,p.ded_out],
+["Coinsurance",p.coins_in,p.coins_out],
+["OOP maximum",p.oop_in,p.oop_out],
+["PCP / Specialist / Urgent",p.office,"See applicable plan terms"],
+["Rx Retail 30-Day",p.rx,"See applicable plan terms"]
+
+].map(r=>
+
+'<tr>'+
+'<td><b>'+
+r[0]+
+'</b></td>'+
+'<td>'+
+r[1]+
+'</td>'+
+'<td>'+
+r[2]+
+'</td>'+
+'</tr>'
+
+).join("");
+
+scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+function goCompare(){
+
+overview();
+
+setTimeout(()=>{
+
+document
+.getElementById("compareHeading")
+.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+},100);
+
+}
+
+sel.addEventListener(
+"change",
+e=>
+e.target.value===""
+? overview()
+: show(Number(e.target.value))
+);
+
+buildCompareOptions();
+
+render();
+
+updateCompareCount();
+
+</script>
+
+</body>
+</html>
