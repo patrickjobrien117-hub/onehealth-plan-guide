@@ -1,1123 +1,637 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OneHealth Plus Interactive Plan Study Guide</title>
 
-<title>OneHealth Plus Interactive Plan Study Guide</title>
+  <style>
+    :root {
+      --burg: #7a0646;
+      --burg2: #a20a5d;
+      --ink: #242124;
+      --muted: #6d6670;
+      --bg: #f7f4f6;
+      --line: #e6dfe4;
+      --soft: #f2e8ee;
+      --white: #ffffff;
+      --green: #178447;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
 
-<style>
-:root{
-  --burg:#7a0646;
-  --burg2:#a20a5d;
-  --ink:#242124;
-  --muted:#6d6670;
-  --bg:#f7f4f6;
-  --line:#e6dfe4;
-  --soft:#f2e8ee;
-  --green:#16794b;
-  --greenSoft:#e7f5ee;
-  --purple:#5632a8;
-  --purpleSoft:#eee9fb;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-*{box-sizing:border-box}
+    html {
+      scroll-behavior: smooth;
+    }
 
-body{
-  margin:0;
-  font-family:Segoe UI,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-}
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
 
-header{
-  background:linear-gradient(135deg,var(--burg),#4e0630);
-  color:#fff;
-  padding:24px 18px;
-  position:sticky;
-  top:0;
-  z-index:10;
-  box-shadow:0 3px 14px #0002;
-}
+    header {
+      background: linear-gradient(135deg, var(--burg), #4e0630);
+      color: white;
+      padding: 24px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.18);
+    }
 
-.wrap{
-  max-width:1180px;
-  margin:auto;
-}
+    .wrap {
+      max-width: 1150px;
+      margin: auto;
+    }
 
-.brand{
-  font-weight:800;
-  font-size:24px;
-}
+    .brand {
+      font-weight: 800;
+      font-size: 24px;
+    }
 
-.sub{
-  opacity:.9;
-  margin-top:3px;
-}
+    .sub {
+      opacity: 0.9;
+      margin-top: 4px;
+      font-size: 14px;
+    }
 
-.menu{
-  margin-top:16px;
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-}
+    .menu {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-select{
-  font-size:15px;
-  padding:11px 40px 11px 12px;
-  border-radius:9px;
-  border:1px solid #ddd;
-  background:#fff;
-  color:#222;
-  min-width:290px;
-  font-weight:700;
-}
+    select,
+    button,
+    input {
+      font: inherit;
+    }
 
-button{
-  border:0;
-  border-radius:9px;
-  padding:11px 14px;
-  background:#fff;
-  color:var(--burg);
-  font-weight:700;
-  cursor:pointer;
-}
+    select {
+      font-size: 15px;
+      padding: 11px 40px 11px 12px;
+      border-radius: 9px;
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #222;
+      min-width: 280px;
+      font-weight: 700;
+    }
 
-button.primary{
-  background:var(--burg);
-  color:#fff;
-}
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
 
-button.secondary{
-  background:#fff;
-  border:1px solid var(--line);
-  color:var(--ink);
-}
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
 
-main{
-  padding:28px 18px 55px;
-}
+    .btn-light {
+      background: #fff;
+      color: var(--burg);
+    }
 
-h1{
-  font-size:30px;
-  margin:0 0 8px;
-}
+    .btn-burg {
+      background: var(--burg2);
+      color: #fff;
+    }
 
-h2{
-  font-size:21px;
-  margin-top:32px;
-}
+    main {
+      padding: 28px 20px 50px;
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
+    .hero {
+      background: white;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
 
-.card{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:17px;
-  box-shadow:0 2px 8px #00000009;
-}
+    .hero h1 {
+      margin-top: 0;
+      color: var(--burg);
+      font-size: 30px;
+    }
 
-.card:hover{
-  transform:translateY(-1px);
-  box-shadow:0 5px 14px #00000012;
-}
+    .hero p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
 
-.card h3{
-  margin:10px 0;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
 
-.label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.6px;
-  color:var(--muted);
-  font-weight:800;
-}
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    }
 
-.value{
-  font-size:18px;
-  font-weight:800;
-  margin-top:4px;
-}
+    .card h2,
+    .card h3 {
+      color: var(--burg);
+      margin-top: 0;
+    }
 
-.badge{
-  display:inline-block;
-  padding:4px 9px;
-  border-radius:999px;
-  background:var(--soft);
-  color:var(--burg);
-  font-size:12px;
-  font-weight:800;
-}
+    .pill {
+      display: inline-block;
+      background: var(--soft);
+      color: var(--burg);
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
 
-.badge.hsa{
-  background:var(--greenSoft);
-  color:var(--green);
-}
+    .section {
+      margin-top: 26px;
+    }
 
-.badge.valuePlan{
-  background:var(--purpleSoft);
-  color:var(--purple);
-}
+    .section-title {
+      font-size: 24px;
+      color: var(--burg);
+      margin-bottom: 14px;
+    }
 
-.search{
-  width:100%;
-  padding:12px;
-  border:1px solid var(--line);
-  border-radius:9px;
-  font-size:15px;
-  margin:10px 0 16px;
-}
+    .faq-item {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
 
-.quick{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      background: white;
+      color: var(--ink);
+      padding: 16px;
+      border-radius: 0;
+      font-weight: 800;
+    }
 
-.quick div{
-  padding:14px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:10px;
-}
+    .faq-answer {
+      display: none;
+      padding: 0 16px 16px;
+      color: var(--muted);
+    }
 
-.tip{
-  background:#fff;
-  border-left:5px solid var(--burg);
-  padding:15px 17px;
-  border-radius:8px;
-  margin-top:18px;
-}
+    .faq-item.open .faq-answer {
+      display: block;
+    }
 
-.hidden{
-  display:none;
-}
+    .quiz-box {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
 
-.comparePanel{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:18px;
-  margin-top:12px;
-}
+    .quiz-question {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--burg);
+    }
 
-.compareGroups{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-}
+    .answers {
+      display: grid;
+      gap: 10px;
+    }
 
-.compareGroup{
-  border-right:1px solid var(--line);
-  padding-right:15px;
-}
+    .answer-btn {
+      background: var(--soft);
+      color: var(--ink);
+      text-align: left;
+    }
 
-.compareGroup:last-child{
-  border-right:0;
-}
+    .answer-btn.correct {
+      background: #dff4e7;
+      color: #126234;
+    }
 
-.groupTitle{
-  font-size:11px;
-  font-weight:800;
-  text-transform:uppercase;
-  margin-bottom:10px;
-}
+    .answer-btn.wrong {
+      background: #f7d9df;
+      color: #8f1630;
+    }
 
-.compareItem{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  margin:11px 0;
-  font-size:14px;
-}
+    .quiz-result {
+      margin-top: 15px;
+      font-weight: 800;
+    }
 
-.compareItem input{
-  width:18px;
-  height:18px;
-  accent-color:var(--burg);
-}
+    .search-box {
+      width: 100%;
+      max-width: 500px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d7ced4;
+      margin-bottom: 18px;
+    }
 
-.compareActions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:18px;
-  align-items:center;
-}
+    .hidden {
+      display: none !important;
+    }
 
-.compareCount{
-  color:var(--muted);
-  font-size:14px;
-  font-weight:600;
-}
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 24px;
+      font-size: 14px;
+    }
 
-.tableWrap{
-  width:100%;
-  overflow-x:auto;
-  margin-top:16px;
-}
+    @media (max-width: 700px) {
+      .brand {
+        font-size: 20px;
+      }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-  border:1px solid var(--line);
-  min-width:700px;
-}
+      .hero h1 {
+        font-size: 24px;
+      }
 
-th,td{
-  padding:12px;
-  border:1px solid var(--line);
-  text-align:left;
-  font-size:14px;
-  vertical-align:top;
-}
+      select {
+        min-width: 100%;
+        width: 100%;
+      }
 
-th{
-  background:#f1e9ee;
-  font-size:11px;
-  text-transform:uppercase;
-}
-
-.compareTable th.planClassic{
-  background:#fbe7ef;
-  color:var(--burg);
-}
-
-.compareTable th.planHSA{
-  background:var(--greenSoft);
-  color:var(--green);
-}
-
-.compareTable th.planValue{
-  background:var(--purpleSoft);
-  color:var(--purple);
-}
-
-.compareError{
-  padding:12px;
-  background:#fff2f4;
-  border:1px solid #f3c5d1;
-  color:#8c123f;
-  border-radius:9px;
-  margin-top:12px;
-}
-
-.planCheckbox{
-  display:flex;
-  justify-content:flex-end;
-  margin-bottom:3px;
-}
-
-.planCheckbox input{
-  width:18px;
-  height:18px;
-  accent-color:var(--burg);
-}
-
-footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  margin-top:35px;
-}
-
-@media(max-width:900px){
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .compareGroups{
-    grid-template-columns:1fr;
-  }
-
-  .compareGroup{
-    border-right:0;
-    border-bottom:1px solid var(--line);
-    padding-bottom:12px;
-  }
-
-  .compareGroup:last-child{
-    border-bottom:0;
-  }
-}
-
-@media(max-width:560px){
-  .grid,
-  .quick{
-    grid-template-columns:1fr;
-  }
-
-  select{
-    min-width:100%;
-  }
-
-  .menu{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-  }
-
-  .menu select{
-    grid-column:1 / -1;
-  }
-
-  h1{
-    font-size:26px;
-  }
-
-  th,td{
-    font-size:12px;
-    padding:9px;
-  }
-}
-</style>
+      .menu {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
-<header>
-<div class="wrap">
-
-<div class="brand">ONEHEALTH PLUS</div>
-<div class="sub">Interactive Plan-by-Plan Study Guide</div>
-
-<div class="menu">
-
-<select id="planSelect">
-<option value="">Choose a plan…</option>
-</select>
-
-<button onclick="overview()">Overview</button>
-<button onclick="goCompare()">Compare Plans</button>
-<button onclick="window.print()">Print</button>
-
-</div>
-
-</div>
-</header>
-
-<main class="wrap">
-
-<section id="overview">
-
-<h1>Plan Comparison</h1>
-<p>Search plans, open individual plan details, or select plans to compare side-by-side.</p>
-
-<input
-id="search"
-class="search"
-placeholder="Search plans, deductibles, HSA, copays…"
-oninput="render()"
->
-
-<div id="cards" class="grid"></div>
-
-<h2 id="compareHeading">Compare Plans</h2>
-
-<p>Select 2–4 plans to compare side-by-side.</p>
-
-<div class="comparePanel">
-
-<div id="compareOptions" class="compareGroups"></div>
-
-<div class="compareActions">
-
-<button class="primary" onclick="comparePlans()">
-Compare Selected
-</button>
-
-<button class="secondary" onclick="clearComparison()">
-Clear Selection
-</button>
-
-<span id="compareCount" class="compareCount">
-0 plans selected
-</span>
-
-</div>
-
-<div id="comparisonResult"></div>
-
-</div>
-
-<h2>What to Memorize First</h2>
-
-<div class="quick">
-
-<div>
-<b>Lowest deductible:</b>
-$1,000 Classic
-</div>
-
-<div>
-<b>Balanced Classic:</b>
-$1,500 / $2,500
-</div>
-
-<div>
-<b>Higher deductible:</b>
-$3,500 / $5,000 Classic
-</div>
-
-<div>
-<b>Highest deductible:</b>
-$7,350 Value
-</div>
-
-<div>
-<b>HSA:</b>
-$3,500 / $5,000 HSA
-</div>
-
-<div>
-<b>Core numbers:</b>
-deductible → OOP max → office copays → Rx
-</div>
-
-</div>
-
-<div class="tip">
-
-<b>Shared reminders:</b>
-
-Preventive care is shown as 100% with no member cost sharing / deductible waived.
-
-Freestanding labwork and X-rays use Quest Laboratories and LabCorp.
-
-The study materials show no charge on non-HSA plans and 20% after deductible on HSA plans.
-
-Cigna is the medical/PPO network and Securus is the TPA.
-
-</div>
-
-</section>
-
-<section id="detail" class="hidden">
-
-<span id="badge" class="badge"></span>
-
-<h1 id="title"></h1>
-
-<p id="hook"></p>
-
-<div id="metrics" class="grid"></div>
-
-<h2>Detailed Cost Sharing</h2>
-
-<div class="tableWrap">
-
-<table>
-
-<thead>
-<tr>
-<th>Category</th>
-<th>In-Network</th>
-<th>Out-of-Network</th>
-</tr>
-</thead>
-
-<tbody id="rows"></tbody>
-
-</table>
-
-</div>
-
-<div class="tip">
-
-<b>Study tip:</b>
-
-Memorize the in-network deductible and OOP maximum first.
-
-Then memorize office copays and prescription structure.
-
-</div>
-
-</section>
-
-<footer>
-OneHealth Plus study guide based on the plan comparison and internal FAQ materials used for training.
-</footer>
-
-</main>
-
-<script>
-
-const plans=[
-
-{
-name:"$1,000 Classic",
-type:"Classic",
-ded_in:"$1,000 / $2,000",
-coins_in:"80% / 20%",
-oop_in:"$5,000 / $10,000",
-office:"$20 / $40 / $40",
-ded_out:"$2,000 / $4,000",
-coins_out:"60% / 40%",
-oop_out:"$10,000 / $20,000",
-rx:"$15 / $45 / $85",
-hook:"Lowest deductible Classic option; lowest listed office copays."
-},
-
-{
-name:"$1,500 Classic",
-type:"Classic",
-ded_in:"$1,500 / $3,000",
-coins_in:"80% / 20%",
-oop_in:"$7,350 / $14,700",
-office:"$30 / $60 / $60",
-ded_out:"$3,000 / $6,000",
-coins_out:"60% / 40%",
-oop_out:"$14,700 / $29,400",
-rx:"$15 / $45 / $85",
-hook:"Balanced Classic option."
-},
-
-{
-name:"$2,500 Classic",
-type:"Classic",
-ded_in:"$2,500 / $5,000",
-coins_in:"80% / 20%",
-oop_in:"$7,350 / $14,700",
-office:"$30 / $60 / $60",
-ded_out:"$5,000 / $10,000",
-coins_out:"60% / 40%",
-oop_out:"$14,700 / $29,400",
-rx:"$15 / $45 / $85",
-hook:"Moderate deductible; same listed office copays as the $1,500 Classic."
-},
-
-{
-name:"$3,500 Classic",
-type:"Classic",
-ded_in:"$3,500 / $7,000",
-coins_in:"80% / 20%",
-oop_in:"$7,350 / $14,700",
-office:"$45 / $90 / $90",
-ded_out:"$7,000 / $14,000",
-coins_out:"60% / 40%",
-oop_out:"$14,700 / $29,400",
-rx:"$15 / $65 / $100",
-hook:"Higher deductible with higher listed office copays."
-},
-
-{
-name:"$5,000 Classic",
-type:"Classic",
-ded_in:"$5,000 / $10,000",
-coins_in:"80% / 20%",
-oop_in:"$7,350 / $14,700",
-office:"$45 / $90 / $90",
-ded_out:"$10,000 / $20,000",
-coins_out:"60% / 40%",
-oop_out:"$14,700 / $29,400",
-rx:"$15 / $65 / $100",
-hook:"High-deductible Classic option."
-},
-
-{
-name:"$7,350 Value",
-type:"Value",
-ded_in:"$7,350 / $14,700",
-coins_in:"100%",
-oop_in:"$7,350 / $14,700",
-office:"$50 / $100 / $100",
-ded_out:"$14,700 / $29,400",
-coins_out:"50% / 50%",
-oop_out:"$16,000 / $32,000",
-rx:"$15 / $65 / $100",
-hook:"Highest deductible in the listed Classic/Value lineup; highest listed out-of-network OOP max."
-},
-
-{
-name:"$3,500 HSA",
-type:"HSA",
-ded_in:"$3,500 / $7,000",
-coins_in:"80% / 20%",
-oop_in:"$6,650 / $13,100",
-office:"20% after deductible",
-ded_out:"$7,000 / $14,000",
-coins_out:"60% / 40%",
-oop_out:"$13,100 / $26,200",
-rx:"After deductible",
-hook:"HSA option; listed office services are 20% after deductible."
-},
-
-{
-name:"$5,000 HSA",
-type:"HSA",
-ded_in:"$5,000 / $10,000",
-coins_in:"80% / 20%",
-oop_in:"$6,650 / $13,100",
-office:"20% after deductible",
-ded_out:"$10,000 / $20,000",
-coins_out:"60% / 40%",
-oop_out:"$13,100 / $26,200",
-rx:"After deductible",
-hook:"Higher-deductible HSA option; listed office services are 20% after deductible."
-}
-
-];
-
-const sel=document.getElementById("planSelect");
-
-sel.innerHTML=
-'<option value="">Choose a plan…</option>'+
-plans.map((p,i)=>
-'<option value="'+i+'">'+p.name+'</option>'
-).join("");
-
-function badgeClass(type){
-
-if(type==="HSA"){
-return "badge hsa";
-}
-
-if(type==="Value"){
-return "badge valuePlan";
-}
-
-return "badge";
-
-}
-
-function render(){
-
-const q=
-(document.getElementById("search").value||"").toLowerCase();
-
-document.getElementById("cards").innerHTML=
-plans
-.map((p,i)=>({p,i}))
-.filter(x=>
-JSON.stringify(x.p).toLowerCase().includes(q)
-)
-.map(x=>
-
-'<div class="card">'+
-
-'<div class="planCheckbox">'+
-'<input type="checkbox" class="cardCompare" value="'+x.i+'" onchange="syncComparison(this)">'+
-'</div>'+
-
-'<span class="'+badgeClass(x.p.type)+'">'+
-x.p.type+
-'</span>'+
-
-'<h3>'+
-x.p.name+
-'</h3>'+
-
-'<div class="label">In-network deductible</div>'+
-
-'<div class="value">'+
-x.p.ded_in+
-'</div>'+
-
-'<div class="label" style="margin-top:9px">'+
-'In-network OOP max'+
-'</div>'+
-
-'<div class="value">'+
-x.p.oop_in+
-'</div>'+
-
-'<p>'+
-x.p.hook+
-'</p>'+
-
-'<button class="secondary" onclick="show('+x.i+')">'+
-'View Details'+
-'</button>'+
-
-'</div>'
-
-).join("");
-
-syncCardCheckboxes();
-
-}
-
-function buildCompareOptions(){
-
-const groups={
-Classic:[],
-Value:[],
-HSA:[]
-};
-
-plans.forEach((p,i)=>{
-groups[p.type].push({p,i});
-});
-
-document.getElementById("compareOptions").innerHTML=
-
-'<div class="compareGroup">'+
-'<div class="groupTitle">Classic Plans</div>'+
-groups.Classic.map(x=>
-'<label class="compareItem">'+
-'<input type="checkbox" class="planCompare" value="'+x.i+'" onchange="comparisonChanged()">'+
-x.p.name+
-'</label>'
-).join("")+
-'</div>'+
-
-'<div class="compareGroup">'+
-'<div class="groupTitle">Value Plan</div>'+
-groups.Value.map(x=>
-'<label class="compareItem">'+
-'<input type="checkbox" class="planCompare" value="'+x.i+'" onchange="comparisonChanged()">'+
-x.p.name+
-'</label>'
-).join("")+
-'</div>'+
-
-'<div class="compareGroup">'+
-'<div class="groupTitle">HSA Plans</div>'+
-groups.HSA.map(x=>
-'<label class="compareItem">'+
-'<input type="checkbox" class="planCompare" value="'+x.i+'" onchange="comparisonChanged()">'+
-x.p.name+
-'</label>'
-).join("")+
-'</div>';
-
-}
-
-function selectedIndexes(){
-
-return [
-...document.querySelectorAll(".planCompare:checked")
-].map(cb=>Number(cb.value));
-
-}
-
-function comparisonChanged(){
-
-const selected=selectedIndexes();
-
-if(selected.length>4){
-
-const checked=
-document.querySelectorAll(".planCompare:checked");
-
-checked[checked.length-1].checked=false;
-
-alert("You can compare up to 4 plans at a time.");
-
-}
-
-updateCompareCount();
-
-syncCardCheckboxes();
-
-}
-
-function updateCompareCount(){
-
-const count=selectedIndexes().length;
-
-document.getElementById("compareCount").textContent=
-count+
-(count===1 ? " plan selected" : " plans selected");
-
-}
-
-function syncComparison(box){
-
-const matching=
-document.querySelector(
-'.planCompare[value="'+box.value+'"]'
-);
-
-if(matching){
-
-matching.checked=box.checked;
-
-}
-
-comparisonChanged();
-
-}
-
-function syncCardCheckboxes(){
-
-const selected=selectedIndexes();
-
-document
-.querySelectorAll(".cardCompare")
-.forEach(cb=>{
-
-cb.checked=
-selected.includes(Number(cb.value));
-
-});
-
-}
-
-function clearComparison(){
-
-document
-.querySelectorAll(".planCompare,.cardCompare")
-.forEach(cb=>cb.checked=false);
-
-document.getElementById("comparisonResult").innerHTML="";
-
-updateCompareCount();
-
-}
-
-function comparePlans(){
-
-const selected=
-selectedIndexes().map(i=>plans[i]);
-
-const result=
-document.getElementById("comparisonResult");
-
-if(selected.length<2){
-
-result.innerHTML=
-'<div class="compareError">'+
-'Please select at least 2 plans to compare.'+
-'</div>';
-
-return;
-
-}
-
-const rows=[
-
-["Plan Type","type"],
-
-["In-Network Deductible","ded_in"],
-
-["In-Network Coinsurance","coins_in"],
-
-["In-Network OOP Max","oop_in"],
-
-["Office Copays","office"],
-
-["Out-of-Network Deductible","ded_out"],
-
-["Out-of-Network Coinsurance","coins_out"],
-
-["Out-of-Network OOP Max","oop_out"],
-
-["Rx Retail 30-Day","rx"]
-
-];
-
-let html=
-
-'<div class="tableWrap">'+
-
-'<table class="compareTable">'+
-
-'<thead>'+
-
-'<tr>'+
-
-'<th>Benefit</th>';
-
-selected.forEach(p=>{
-
-let cls="planClassic";
-
-if(p.type==="HSA"){
-cls="planHSA";
-}
-
-if(p.type==="Value"){
-cls="planValue";
-}
-
-html+=
-'<th class="'+cls+'">'+
-p.name+
-'</th>';
-
-});
-
-html+=
-'</tr>'+
-'</thead>'+
-'<tbody>';
-
-rows.forEach(([label,key])=>{
-
-html+=
-'<tr>'+
-'<td><b>'+
-label+
-'</b></td>';
-
-selected.forEach(p=>{
-
-html+=
-'<td>'+
-p[key]+
-'</td>';
-
-});
-
-html+=
-'</tr>';
-
-});
-
-html+=
-'</tbody>'+
-'</table>'+
-'</div>';
-
-result.innerHTML=html;
-
-result.scrollIntoView({
-behavior:"smooth",
-block:"start"
-});
-
-}
-
-function overview(){
-
-document
-.getElementById("overview")
-.classList.remove("hidden");
-
-document
-.getElementById("detail")
-.classList.add("hidden");
-
-sel.value="";
-
-scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-function show(i){
-
-const p=plans[i];
-
-sel.value=i;
-
-document
-.getElementById("overview")
-.classList.add("hidden");
-
-document
-.getElementById("detail")
-.classList.remove("hidden");
-
-const badge=
-document.getElementById("badge");
-
-badge.className=
-badgeClass(p.type);
-
-badge.textContent=
-p.type;
-
-document.getElementById("title").textContent=
-p.name;
-
-document.getElementById("hook").textContent=
-p.hook;
-
-document.getElementById("metrics").innerHTML=
-
-[
-["In-network deductible",p.ded_in],
-["In-network OOP max",p.oop_in],
-["Office copays",p.office],
-["Rx retail 30-day",p.rx]
-
-].map(m=>
-
-'<div class="card">'+
-'<div class="label">'+
-m[0]+
-'</div>'+
-'<div class="value">'+
-m[1]+
-'</div>'+
-'</div>'
-
-).join("");
-
-document.getElementById("rows").innerHTML=
-
-[
-["Deductible",p.ded_in,p.ded_out],
-["Coinsurance",p.coins_in,p.coins_out],
-["OOP maximum",p.oop_in,p.oop_out],
-["PCP / Specialist / Urgent",p.office,"See applicable plan terms"],
-["Rx Retail 30-Day",p.rx,"See applicable plan terms"]
-
-].map(r=>
-
-'<tr>'+
-'<td><b>'+
-r[0]+
-'</b></td>'+
-'<td>'+
-r[1]+
-'</td>'+
-'<td>'+
-r[2]+
-'</td>'+
-'</tr>'
-
-).join("");
-
-scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-function goCompare(){
-
-overview();
-
-setTimeout(()=>{
-
-document
-.getElementById("compareHeading")
-.scrollIntoView({
-behavior:"smooth",
-block:"start"
-});
-
-},100);
-
-}
-
-sel.addEventListener(
-"change",
-e=>
-e.target.value===""
-? overview()
-: show(Number(e.target.value))
-);
-
-buildCompareOptions();
-
-render();
-
-updateCompareCount();
-
-</script>
-
+  <header>
+    <div class="wrap">
+      <div class="brand">OneHealth Plus Interactive Plan Study Guide</div>
+      <div class="sub">
+        Quick-reference guide for plan concepts, terminology, workflows, and review questions.
+      </div>
+
+      <div class="menu">
+        <select id="sectionSelect">
+          <option value="">Jump to a section</option>
+          <option value="overview">Plan Overview</option>
+          <option value="terms">Key Terms</option>
+          <option value="workflow">Workflow</option>
+          <option value="faq">FAQs</option>
+          <option value="quiz">Knowledge Check</option>
+        </select>
+
+        <button class="btn-light" onclick="scrollToTop()">Top</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+
+      <section class="hero" id="overview">
+        <div class="pill">Study Guide</div>
+        <h1>OneHealth Plus Plan Overview</h1>
+        <p>
+          Use this page as a quick-reference study tool. Review important plan concepts,
+          common terminology, workflow steps, FAQs, and quiz questions.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Quick Reference</h2>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Plan Administration</h3>
+            <p>
+              OneHealth Plus helps coordinate employer health-plan administration,
+              member support, plan education, and related program services.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Network Access</h3>
+            <p>
+              Members may access provider networks according to the specific health plan
+              selected by the employer.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Member Support</h3>
+            <p>
+              Members may need help understanding eligibility, benefits, claims,
+              provider access, and plan navigation.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Employer Support</h3>
+            <p>
+              Employers may receive assistance with implementation, plan communication,
+              enrollment support, and ongoing administration.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="terms">
+        <h2 class="section-title">Key Terms</h2>
+
+        <input
+          type="text"
+          class="search-box"
+          id="searchBox"
+          placeholder="Search key terms..."
+        />
+
+        <div class="grid" id="termGrid">
+
+          <div class="card term-card">
+            <h3>Deductible</h3>
+            <p>
+              The amount a member may need to pay for covered services before the plan
+              begins paying certain benefits.
+            </p>
+          </div>
+
+          <div class="card term-card">
+            <h3>Copay</h3>
+            <p>
+              A fixed amount a member may pay for a covered service, such as a doctor visit.
+            </p>
+          </div>
+
+          <div class="card term-card">
+            <h3>Coinsurance</h3>
+            <p>
+              The percentage of covered healthcare costs a member may pay after meeting
+              the applicable deductible.
+            </p>
+          </div>
+
+          <div class="card term-card">
+            <h3>Out-of-Pocket Maximum</h3>
+            <p>
+              The maximum amount a member generally pays for covered in-network services
+              during a plan year before the plan pays 100% of covered eligible costs.
+            </p>
+          </div>
+
+          <div class="card term-card">
+            <h3>In-Network</h3>
+            <p>
+              Providers or facilities that participate in the plan's contracted network.
+            </p>
+          </div>
+
+          <div class="card term-card">
+            <h3>Out-of-Network</h3>
+            <p>
+              Providers or facilities that do not participate in the contracted plan network.
+            </p>
+          </div>
+
+          <div class="card term-card">
+            <h3>Eligibility</h3>
+            <p>
+              The rules that determine whether an employee or dependent qualifies
+              for coverage.
+            </p>
+          </div>
+
+          <div class="card term-card">
+            <h3>Effective Date</h3>
+            <p>
+              The date coverage officially begins.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" id="workflow">
+        <h2 class="section-title">Typical Workflow</h2>
+
+        <div class="grid">
+          <div class="card">
+            <div class="pill">Step 1</div>
+            <h3>Receive Request</h3>
+            <p>
+              Identify whether the request involves enrollment, eligibility,
+              benefits, claims, implementation, or member support.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="pill">Step 2</div>
+            <h3>Verify Information</h3>
+            <p>
+              Confirm employer group, member information, plan selection,
+              effective date, and relevant documentation.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="pill">Step 3</div>
+            <h3>Research</h3>
+            <p>
+              Review plan materials, internal systems, carrier resources,
+              and applicable procedures.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="pill">Step 4</div>
+            <h3>Resolve or Escalate</h3>
+            <p>
+              Complete the request when possible or escalate to the appropriate
+              internal team or external partner.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="pill">Step 5</div>
+            <h3>Document</h3>
+            <p>
+              Record actions taken, communication, status, and any required follow-up.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="pill">Step 6</div>
+            <h3>Follow Up</h3>
+            <p>
+              Confirm resolution and make sure the employer, member,
+              or internal stakeholder receives the needed update.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What should I verify before answering a member question?
+          </button>
+          <div class="faq-answer">
+            Verify the member, employer group, coverage status, effective date,
+            plan information, and the exact issue being asked about.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What if I do not know the answer?
+          </button>
+          <div class="faq-answer">
+            Avoid guessing. Research the correct plan documents or system information,
+            then escalate when necessary.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Why is documentation important?
+          </button>
+          <div class="faq-answer">
+            Documentation creates a clear history of the request, actions taken,
+            communications, decisions, and follow-up.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What information should never be shared casually?
+          </button>
+          <div class="faq-answer">
+            Protected health information and other sensitive member information
+            should only be handled according to company privacy and security procedures.
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="quiz">
+        <h2 class="section-title">Knowledge Check</h2>
+
+        <div class="quiz-box">
+          <div class="quiz-question" id="quizQuestion">
+            What should you do if you are unsure of the correct benefit information?
+          </div>
+
+          <div class="answers">
+            <button class="answer-btn" onclick="checkAnswer(this, false)">
+              Give your best guess
+            </button>
+
+            <button class="answer-btn" onclick="checkAnswer(this, true)">
+              Verify the plan information before responding
+            </button>
+
+            <button class="answer-btn" onclick="checkAnswer(this, false)">
+              Tell the member every plan works the same
+            </button>
+
+            <button class="answer-btn" onclick="checkAnswer(this, false)">
+              Ignore the request
+            </button>
+          </div>
+
+          <div class="quiz-result" id="quizResult"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    OneHealth Plus Interactive Plan Study Guide
+  </footer>
+
+  <script>
+    const sectionSelect = document.getElementById("sectionSelect");
+
+    sectionSelect.addEventListener("change", function () {
+      const section = document.getElementById(this.value);
+
+      if (section) {
+        section.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    const faqQuestions = document.querySelectorAll(".faq-question");
+
+    faqQuestions.forEach((question) => {
+      question.addEventListener("click", () => {
+        question.parentElement.classList.toggle("open");
+      });
+    });
+
+    const searchBox = document.getElementById("searchBox");
+    const termCards = document.querySelectorAll(".term-card");
+
+    searchBox.addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+
+      termCards.forEach((card) => {
+        const text = card.innerText.toLowerCase();
+
+        if (text.includes(query)) {
+          card.classList.remove("hidden");
+        } else {
+          card.classList.add("hidden");
+        }
+      });
+    });
+
+    function checkAnswer(button, correct) {
+      const buttons = document.querySelectorAll(".answer-btn");
+      const result = document.getElementById("quizResult");
+
+      buttons.forEach((btn) => {
+        btn.disabled = true;
+      });
+
+      if (correct) {
+        button.classList.add("correct");
+        result.textContent = "Correct.";
+      } else {
+        button.classList.add("wrong");
+        result.textContent = "Not quite. Verify the plan information before responding.";
+      }
+    }
+  </script>
 </body>
 </html>
